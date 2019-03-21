@@ -6,6 +6,7 @@ class ModalNavigation {
 
   static MaterialPageRoute getModalConfig(BuildContext context, Widget route) => MaterialPageRoute(
     fullscreenDialog: true,
-    builder: (context) => route
+    builder: (context) => route,
+    maintainState: false
   );
 }

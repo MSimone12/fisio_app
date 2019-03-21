@@ -1,8 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:fisio_app/utils/navigation.dart';
 import 'package:fisio_app/app/dictionary/dictionary.dart';
+import 'package:fisio_app/app/gasometria/gasometria.dart';
+import 'package:fisio_app/commom/fisio_card.dart';
 
 class Home extends StatelessWidget {
+
+  static Widget _renderListViewContainer(BuildContext context) =>
+    Container(
+      height: 100,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: <Widget>[
+          GestureDetector(
+            onTap: () => Navigator.of(context).push(ModalNavigation.getModalConfig(context, Gasometria())),
+            child: FisioCard(
+              tag: 'gasometria',
+              width: 90,
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(CupertinoIcons.lab_flask, size: 40,),
+                  ),
+                  Text('Gasometria')
+                ] ,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -10,46 +41,28 @@ class Home extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
+          title: Text('Fisio CheatSheet', style: TextStyle(color: Colors.black87)),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.book),
+              icon: Icon(Icons.library_books),
               onPressed: (){
-                Navigator.of(context).push(
-                  ModalNavigation.getModalConfig(context, Dictionary())
+                showCupertinoModalPopup(
+                  context: context,
+                  builder: (context) => Dictionary(),
                 );
               },
               tooltip: 'Dicionario',
               color: Colors.black,
-            )
+            ) 
           ],
         ),
-        body: Container(
-          height: 80,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Container(
-                  width: 60,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    border: Border.all(
-                      color: Color.fromRGBO(200, 200, 200, 0.8)
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromRGBO(200, 200, 200, 0.8),
-                        offset: Offset(2, 2),
-                        blurRadius: 5
-                      ),
-                    ]
-                  ),
-                ),
-              ),
-            ],
-          ),
+        body: Stack(
+          children: <Widget>[
+            Align(
+              alignment: Alignment.topCenter,
+              child: _renderListViewContainer(context),
+            ),
+          ],
         ),
       ),
     );
