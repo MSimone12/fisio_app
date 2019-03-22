@@ -21,7 +21,7 @@ class Home extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(bottom: 8),
                     child: Icon(CupertinoIcons.lab_flask, size: 40,),
                   ),
                   Text('Gasometria')

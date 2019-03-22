@@ -65,7 +65,6 @@ class _FormStreamBuilderState extends State<FormStreamBuilder> {
       secured: widget.secured,
       textAlign: widget.textAlign,
       onChanged: widget.textChanged?.add,
-      onBlur: handleFieldBlur,
       onFocus: handleFieldFocus,
     )
   );

@@ -25,6 +25,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   rxdart: ^0.21.0
   bloc_pattern: ^1.5.2
+  flutter_masked_text: ^0.8.0
 
 dev_dependencies:
   flutter_test:

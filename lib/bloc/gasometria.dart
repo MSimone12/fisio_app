@@ -1,6 +1,7 @@
 import 'package:rxdart/rxdart.dart';
 import 'package:fisio_app/utils/validation.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:flutter/widgets.dart';
 
 class GasometriaBloc implements BlocBase{
   GasometriaBloc();
@@ -15,16 +16,19 @@ class GasometriaBloc implements BlocBase{
   // PH
   Sink get phIn => _phSubject;
   Observable<String> get phErrorOut => _phSubject.map(Validator.calculatePh);
-  Observable<String> get phState => _phSubject.map(Validator.getPhState);
+  Observable<Color> get phState => _phSubject.map(Validator.getPhState);
   
   // PaO2
   Sink get pao2In => _pao2Subject;
   Observable<String> get pao2Out => _pao2Subject.map((pao2) => '$pao2 mmHg'); 
   Observable<String> get pao2ErrorOut => _pao2Subject.map(Validator.validateRequired);
-  Observable<String> get pao2State => _pao2Subject.map(Validator.getRequiredState);
+  Observable<String> get pao2State => _pao2Subject;
 
   // PaCO2
+  Observable<String> get paco2Out => _paco2Subject;
   Sink get paco2In => _paco2Subject;
+  Observable<String> get paco2ErrorOut => _paco2Subject.map(Validator.validateRequired);
+  Observable<Color> get paco2State => _paco2Subject.map(Validator.getRequiredState);
   
 
   @override

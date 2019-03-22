@@ -14,30 +14,22 @@ class FisioCard extends StatelessWidget {
     return Hero(
       tag: tag,
       flightShuttleBuilder: (context, animation, direction, from, to) => FisioCard(),
-      child: Container(
+      child: Card(
+        elevation: 5,
+        borderOnForeground: false,
         margin: EdgeInsets.all(8),
-        height: height,
-        width: width,
-        child: child,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(
+        clipBehavior: Clip.hardEdge,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: child,
+        ),
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
             color: Color.fromRGBO(200, 200, 200, 0.8),
-            width: 1
+            width: 1,
+            style: BorderStyle.solid
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Color.fromRGBO(200, 200, 200, 0.8),
-              offset: Offset(-2, 2),
-              blurRadius: 5,
-            ),
-            BoxShadow(
-              color: Color.fromRGBO(200, 200, 200, 0.8),
-              offset: Offset(2, 2),
-              blurRadius: 5,
-            ),
-          ],
-          borderRadius: BorderRadius.all(Radius.circular(12))
+          borderRadius: BorderRadius.circular(12)
         ),
       ),
     );
