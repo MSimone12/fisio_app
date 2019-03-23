@@ -7,6 +7,7 @@ Map<String, Color> stateColors = {
 };
 
 class Validator {
+  static bool isNullOrEmpty(String value) => value != null && value.trim().isEmpty; 
   static String validateRequired(String value) => value.trim().isEmpty ? 'Campo obrigatório' : null;
 
   static Color getRequiredState(String value) => value.trim().isEmpty ? Colors.red : null;
