@@ -6,24 +6,18 @@ import 'package:fisio_app/commom/fisio_field.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:fisio_app/commom/buttons/primary_button.dart';
 
-class Gasometria extends StatefulWidget {
-  @override
-  _GasometriaState createState() => _GasometriaState();
-}
-
-class _GasometriaState extends State<Gasometria> {
+class Gasometria extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProviderList.of<GasometriaBloc>(context);
+    final bloc = BlocProvider.of<GasometriaBloc>(context);
     MediaQueryData mediaQuery = MediaQueryData();
     return SafeArea(
-      child: Scaffold(
-        body: Stack(
+      child: Material(
+        child: Stack(
           children: <Widget>[
             Positioned.fill(
               child: FisioCard(
-
                 tag: 'gasometria',
                 height: mediaQuery.padding.top,
                 width: mediaQuery.padding.right,
@@ -114,7 +108,6 @@ class _GasometriaState extends State<Gasometria> {
                                 PrimaryButton(
                                   enabled: bloc.formValidOut,
                                   height: 40,
-                                  startEnabled: false,
                                   label: 'Calcular',
                                   onClick: bloc.submitFormIn,
                                 )

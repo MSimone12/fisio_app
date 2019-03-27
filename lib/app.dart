@@ -7,7 +7,7 @@ import 'package:fisio_app/bloc/gasometria.dart';
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProviderList(
+    return BlocProvider<GasometriaBloc>(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         routes: <String, WidgetBuilder>{
@@ -15,9 +15,7 @@ class App extends StatelessWidget {
           '/gasometria': (context) => Gasometria()
         },
       ),
-      listBloc: [
-        Bloc(GasometriaBloc())
-      ],
+      bloc: GasometriaBloc(),
     );
   }
 }
