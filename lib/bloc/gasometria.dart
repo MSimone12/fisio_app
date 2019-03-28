@@ -13,7 +13,8 @@ class GasometriaBloc extends BlocBase {
   BehaviorSubject<String> _sao2Subject = BehaviorSubject<String>();
   BehaviorSubject<String> _beSubject = BehaviorSubject<String>();
   BehaviorSubject<void> _submitSubject = BehaviorSubject<void>();
-  BehaviorSubject<void> _responseSubject = BehaviorSubject<void>();
+  BehaviorSubject<Map> _responseSubject = BehaviorSubject<Map>();
+  BehaviorSubject<String> _errorSubject = BehaviorSubject<String>();
 
   GasometriaBloc(){
     _submitSubject.withLatestFrom(formValidOut, (s, valid) => valid).where((valid) => valid).listen(_submit);
@@ -49,28 +50,35 @@ class GasometriaBloc extends BlocBase {
   Observable<String> get beErrorOut => _beSubject.map(Validator.validateRequired);
   Observable<Color> get beState => _beSubject.map(Validator.getRequiredState);
 
-  Observable<bool> get formValidOut => Observable.combineLatest6(_phSubject.map(Validator.isNullOrEmpty), _pao2Subject.map(Validator.isNullOrEmpty), _paco2Subject.map(Validator.isNullOrEmpty), _hco3Subject.map(Validator.isNullOrEmpty), _sao2Subject.map(Validator.isNullOrEmpty), _beSubject.map(Validator.isNullOrEmpty), 
-  (a, b, c, d, e, f) => !a && !b && !c && !d && !e && !f).asBroadcastStream();
+  Observable<bool> get formValidOut => Observable.combineLatest4(_phSubject.map(Validator.isNullOrEmpty), _paco2Subject.map(Validator.isNullOrEmpty), _hco3Subject.map(Validator.isNullOrEmpty), _beSubject.map(Validator.isNullOrEmpty), 
+  (a, b, c, d) => !a && !b && !c && !d).asBroadcastStream();
 
   Sink get submitFormIn => _submitSubject;
+
+  Observable get responseStream => _responseSubject;
 
   void _submit(dynamic event){
     try {
       Map response = calculateGasometry(_phSubject.value, _paco2Subject.value, _hco3Subject.value, _beSubject.value);
       _responseSubject.add(response);
-      print(response);
     } catch (e) {
+      _errorSubject.add('Não foi possivel determinar o disturbio');
     }
   }
 
   Map<String, dynamic> calculateGasometry(String ph, String paco2, String hco3, String be){
-    dynamic disorder = disorders.map<String, dynamic>((String disorder, dynamic params){
-      if(params.ph(ph) && params.paco2(paco2) && params.hco3(hco3) && params.be(be)) return MapEntry('disorder', disorder);
-    }).values.first;
+    String res; 
+    disorders.forEach((String disorder, dynamic params){
+      if(params['ph'](ph) && params['paco2'](paco2) && params['hco3'](hco3) && params['be'](be)) {
+        res = disorder;
+        return;
+      }
+    });
 
     return {
-      'disorder': disorder,
-      'isAcute': disorders[disorder].isAcute(ph, paco2, hco3, be)
+      'disorder': res,
+      'isAcute': disorders[res]['isAcute'](ph, paco2, hco3, be),
+      'description': disorderDescription[res]
     };
   }
 
@@ -83,6 +91,7 @@ class GasometriaBloc extends BlocBase {
     _beSubject.close();
     _submitSubject.close();
     _responseSubject.close();
+    _errorSubject.close();
   }
 
 }
