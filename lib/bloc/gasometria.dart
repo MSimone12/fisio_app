@@ -62,7 +62,7 @@ class GasometriaBloc extends BlocBase {
       Map response = calculateGasometry(_phSubject.value, _paco2Subject.value, _hco3Subject.value, _beSubject.value);
       _responseSubject.add(response);
     } catch (e) {
-      _errorSubject.add('Não foi possivel determinar o disturbio');
+      _errorSubject.add('Não foi possivel determinar o disturbio ');
     }
   }
 
