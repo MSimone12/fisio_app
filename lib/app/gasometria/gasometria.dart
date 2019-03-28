@@ -94,6 +94,21 @@ class _GasometriaState extends State<Gasometria> {
                     ),
                   ],
                 ),
+                StreamBuilder(
+                  stream: bloc.errorStream,
+                  builder: (context, snapshot){
+                    if(snapshot.hasData){
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) => Center(
+                          child: Text(snapshot.data,
+                            style: Theme.of(context).primaryTextTheme.display1.copyWith(color: Colors.red),
+                          ),
+                        )
+                      );
+                    }
+                  },
+                )
               ],
             )
           ),
