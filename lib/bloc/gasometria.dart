@@ -1,10 +1,9 @@
 import 'package:rxdart/rxdart.dart';
 import 'package:fisio_app/utils/validation.dart';
-import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fisio_app/utils/disorders_calculator.dart';
 
-class GasometriaBloc extends BlocBase {
+class GasometriaBloc {
 
   BehaviorSubject<String> _phSubject = BehaviorSubject<String>();
   BehaviorSubject<String> _pao2Subject = BehaviorSubject<String>();
@@ -57,12 +56,14 @@ class GasometriaBloc extends BlocBase {
 
   Observable get responseStream => _responseSubject;
 
+  Observable get errorStream => _errorSubject;
+
   void _submit(dynamic event){
     try {
       Map response = calculateGasometry(_phSubject.value, _paco2Subject.value, _hco3Subject.value, _beSubject.value);
       _responseSubject.add(response);
     } catch (e) {
-      _errorSubject.add('Não foi possivel determinar o disturbio ');
+      _errorSubject.add('Não foi possivel determinar o disturbio');
     }
   }
 

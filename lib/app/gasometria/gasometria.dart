@@ -1,7 +1,5 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fisio_app/commom/fisio_card.dart';
-import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:fisio_app/bloc/gasometria.dart';
 import 'package:fisio_app/commom/fisio_field.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
@@ -16,7 +14,7 @@ class Gasometria extends StatefulWidget {
 class _GasometriaState extends State<Gasometria> {
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<GasometriaBloc>(context);
+    final bloc = GasometriaBloc();
     MediaQueryData mediaQuery = MediaQueryData();
     return Scaffold(
       body: SafeArea(
@@ -102,5 +100,11 @@ class _GasometriaState extends State<Gasometria> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    GasometriaBloc().dispose();
   }
 }
