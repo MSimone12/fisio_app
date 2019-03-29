@@ -4,9 +4,8 @@ class ModalNavigation {
 
   ModalNavigation();
 
-  static MaterialPageRoute getModalConfig(BuildContext context, Widget route) => MaterialPageRoute(
-    fullscreenDialog: true,
-    builder: (context) => route,
-    maintainState: false
+  static PageRouteBuilder getModalConfig(BuildContext context, Widget route) => PageRouteBuilder(
+    opaque: false,
+    pageBuilder: (context, _, __) => route,
   );
 }

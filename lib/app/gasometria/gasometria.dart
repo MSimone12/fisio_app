@@ -12,15 +12,22 @@ class Gasometria extends StatefulWidget {
 }
 
 class _GasometriaState extends State<Gasometria> {
+
+  dynamic _showBottomSheet(BuildContext context, Widget child) => showModalBottomSheet(
+    context: context,
+    builder: (context) => child
+  );
+
   @override
   Widget build(BuildContext context) {
     final bloc = GasometriaBloc();
     MediaQueryData mediaQuery = MediaQueryData();
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: FisioCard(
           tag: 'gasometria',
-          height: mediaQuery.padding.top,
+          height: mediaQuery.viewInsets.bottom,
           width: mediaQuery.padding.right,
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
@@ -98,19 +105,25 @@ class _GasometriaState extends State<Gasometria> {
                   stream: bloc.errorStream,
                   builder: (context, snapshot){
                     if(snapshot.hasData){
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (context) => Center(
-                          child: Text(snapshot.data,
-                            style: Theme.of(context).primaryTextTheme.display1.copyWith(color: Colors.red),
+                      bloc.errorStream.listen((_) => _showBottomSheet(
+                        context, 
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                            color: Colors.red
                           ),
+                          height: 40,
+                          child: Center(
+                            child: Text(snapshot.data, style: TextStyle(color: Colors.white),)
+                          )
                         )
-                      );
+                      ));
                     }
-                  },
+                    return Container();
+                  }
                 )
               ],
-            )
+            ),
           ),
         ),
       ),

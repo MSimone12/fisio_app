@@ -36,27 +36,27 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          title: Text('Fisio CheatSheet', style: TextStyle(color: Colors.black87)),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.library_books),
-              onPressed: (){
-                showCupertinoModalPopup(
-                  context: context,
-                  builder: (context) => Dictionary(),
-                );
-              },
-              tooltip: 'Dicionario',
-              color: Colors.black,
-            ) 
-          ],
-        ),
-        body: Stack(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text('Fisio CheatSheet', style: TextStyle(color: Colors.black87)),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.library_books),
+            onPressed: (){
+              showCupertinoModalPopup(
+                context: context,
+                builder: (context) => Dictionary(),
+              );
+            },
+            tooltip: 'Dicionario',
+            color: Colors.black,
+          ) 
+        ],
+      ),
+      body: SafeArea(
+        child: Stack(
           children: <Widget>[
             Align(
               alignment: Alignment.topCenter,
