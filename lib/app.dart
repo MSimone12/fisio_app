@@ -7,6 +7,10 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        canvasColor: Colors.transparent,
+        scaffoldBackgroundColor: Theme.of(context).scaffoldBackgroundColor
+      ),
       routes: <String, WidgetBuilder>{
         '/': (context) => Home(),
         '/gasometria': (context) => Gasometria()

@@ -32,8 +32,8 @@ Map<String, dynamic> disorders = {
 Map disorderDescription = {
   'Alcalose metabólica': 'Alcalose metabólica é uma condição metabólica na qual o pH do sangue está elevado acima da faixa normal. Geralmente é resultado de uma concentração diminuída de ion hidrogênio, levando a concentrações aumentadas de bicarbonato',
   'Acidose metabólica': 'A acidose metabólica é o excesso de acidez no sangue caracterizada por uma concentração anormalmente baixa de carbonatos.',
-  'Alcalose respiratória': '',
-  'Acidose respiratória': ''
+  'Alcalose respiratória': 'Alcalose respiratória é um desequilíbrio ácido-básico causado por respiração alveolar aumentada (hiperventilação), levando a uma concentração diminuída de dióxido de carbono arterial plasmático (PaCO2).',
+  'Acidose respiratória': 'Acidose respiratória é uma acidose (diminuição anormal do pH sanguíneo) devido à ventilação diminuída dos alvéolos pulmonares, levando a uma concentração aumentada de dióxido de carbono arterial (PaCO2).'
 };
 
 class Calculator {

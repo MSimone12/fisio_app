@@ -13,17 +13,19 @@ class Gasometria extends StatefulWidget {
 
 class _GasometriaState extends State<Gasometria> {
 
-  dynamic _showBottomSheet(BuildContext context, Widget child) => showModalBottomSheet(
-    context: context,
-    builder: (context) => child
-  );
+  Future _showBottomSheet(BuildContext context, Widget child) async {
+    await showModalBottomSheet(
+      context: context,
+      builder: (context) => child,
+    );
+    GasometriaBloc().resetStream.add(null);
+  }
 
   @override
   Widget build(BuildContext context) {
     final bloc = GasometriaBloc();
     MediaQueryData mediaQuery = MediaQueryData();
     return Scaffold(
-      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: FisioCard(
           tag: 'gasometria',
@@ -108,11 +110,13 @@ class _GasometriaState extends State<Gasometria> {
                       bloc.errorStream.listen((_) => _showBottomSheet(
                         context, 
                         Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-                            color: Colors.red
-                          ),
                           height: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.only(
+                                topLeft: const Radius.circular(10.0),
+                                topRight: const Radius.circular(10.0)),
+                          ),
                           child: Center(
                             child: Text(snapshot.data, style: TextStyle(color: Colors.white),)
                           )
@@ -121,6 +125,43 @@ class _GasometriaState extends State<Gasometria> {
                     }
                     return Container();
                   }
+                ),
+                StreamBuilder(
+                  stream: bloc.responseStream,
+                  builder: (context, snapshot){
+
+                    bloc.responseStream.listen((_) => _showBottomSheet(
+                      context, 
+                      Container(
+                        height: 300,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: const Radius.circular(10.0),
+                              topRight: const Radius.circular(10.0)),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Text(snapshot.data['disorder'],
+                              style: Theme.of(context).textTheme.headline,
+                            ),
+                            Text(snapshot.data['isAcute'] ? 'Aguda' : 'Crônica',
+                              style: Theme.of(context).textTheme.subhead,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(32),
+                              child: Text(snapshot.data['description'],
+                                style: Theme.of(context).textTheme.body1,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ));
+                    return Container();
+                  },
                 )
               ],
             ),
