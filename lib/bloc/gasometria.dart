@@ -10,8 +10,8 @@ class GasometriaBloc {
   BehaviorSubject<String> _hco3Subject = BehaviorSubject<String>();
   BehaviorSubject<String> _beSubject = BehaviorSubject<String>();
   BehaviorSubject<void> _submitSubject = BehaviorSubject<void>();
-  BehaviorSubject<Map> _responseSubject = BehaviorSubject<Map>();
-  BehaviorSubject<String> _errorSubject = BehaviorSubject<String>();
+  BehaviorSubject<dynamic> _responseSubject = BehaviorSubject<dynamic>();
+  BehaviorSubject<dynamic> _errorSubject = BehaviorSubject<dynamic>();
   BehaviorSubject<void> _resetSubject = BehaviorSubject<void>();
 
 
@@ -22,31 +22,36 @@ class GasometriaBloc {
 
   // PH
   Sink get phIn => _phSubject;
+  Observable<String> get phOut => _phSubject;
   Observable<String> get phErrorOut => _phSubject.map(Validator.validateRequired);
   Observable<Color> get phState => _phSubject.map(Validator.getRequiredState);
   
   // PaCO2
   Sink get paco2In => _paco2Subject;
+  Observable<String> get paco2Out => _paco2Subject;
   Observable<String> get paco2ErrorOut => _paco2Subject.map(Validator.validateRequired);
   Observable<Color> get paco2State => _paco2Subject.map(Validator.getRequiredState);
   
   // HCO3
   Sink get hco3In => _hco3Subject;
+  Observable get hco3Out => _hco3Subject;
   Observable<String> get hco3ErrorOut => _hco3Subject.map(Validator.validateRequired);
   Observable<Color> get hco3State => _hco3Subject.map(Validator.getRequiredState);
 
   // BE
   Sink get beIn => _beSubject;
+  Observable get beOut => _beSubject;
   Observable<String> get beErrorOut => _beSubject.map(Validator.validateRequired);
   Observable<Color> get beState => _beSubject.map(Validator.getRequiredState);
 
   Observable<bool> get formValidOut => Observable.combineLatest4(phErrorOut, paco2ErrorOut, hco3ErrorOut, beErrorOut, 
-  (a, b, c, d) => !(a != null && b != null && c != null && d != null)).asBroadcastStream();
+  (a, b, c, d) => a == null && b == null && c == null && d == null).asBroadcastStream();
 
   Sink get submitFormIn => _submitSubject;
 
   Observable get responseStream => _responseSubject;
 
+  Sink get errorIn => _errorSubject;
   Observable get errorStream => _errorSubject;
 
   Sink get resetStream => _resetSubject;
@@ -79,10 +84,11 @@ class GasometriaBloc {
   }
 
   void _cleanAll(dynamic event){
-    phIn.add('');
-    paco2In.add('');
-    hco3In.add('');
-    beIn.add('');
+    phIn.add(null);
+    paco2In.add(null);
+    hco3In.add(null);
+    beIn.add(null);
+    errorIn.add(null);
   }
 
   void dispose() {

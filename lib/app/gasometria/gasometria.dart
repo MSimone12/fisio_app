@@ -13,17 +13,18 @@ class Gasometria extends StatefulWidget {
 
 class _GasometriaState extends State<Gasometria> {
 
+  final bloc = GasometriaBloc();
+
   Future _showBottomSheet(BuildContext context, Widget child) async {
     await showModalBottomSheet(
       context: context,
       builder: (context) => child,
     );
-    GasometriaBloc().resetStream.add(null);
+    bloc.resetStream.add(null);
   }
 
   @override
   Widget build(BuildContext context) {
-    final bloc = GasometriaBloc();
     MediaQueryData mediaQuery = MediaQueryData();
     return Scaffold(
       body: SafeArea(
@@ -62,6 +63,7 @@ class _GasometriaState extends State<Gasometria> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     FisioField(
+                      value: bloc.phOut,
                       onChange: bloc.phIn.add,
                       label: 'Ph',
                       errorStream: bloc.phErrorOut,
@@ -70,6 +72,7 @@ class _GasometriaState extends State<Gasometria> {
                       controller: MaskedTextController(mask: '0.00'),
                     ),
                     FisioField(
+                      value: bloc.paco2Out,
                       stateStream: bloc.paco2State,
                       errorStream: bloc.paco2ErrorOut,
                       keyboardType: TextInputType.number,
@@ -79,6 +82,7 @@ class _GasometriaState extends State<Gasometria> {
                       onChange: bloc.paco2In.add,
                     ),
                     FisioField(
+                      value: bloc.hco3Out,
                       stateStream: bloc.hco3State,
                       errorStream: bloc.hco3ErrorOut,
                       keyboardType: TextInputType.number,
@@ -88,6 +92,7 @@ class _GasometriaState extends State<Gasometria> {
                       onChange: bloc.hco3In.add,
                     ),
                     FisioField(
+                      value: bloc.beOut,
                       stateStream: bloc.beState,
                       errorStream: bloc.beErrorOut,
                       keyboardType: TextInputType.numberWithOptions(decimal: true, signed: true),
@@ -104,10 +109,10 @@ class _GasometriaState extends State<Gasometria> {
                   ],
                 ),
                 StreamBuilder(
-                  stream: bloc.errorStream,
+                  stream: null,
                   builder: (context, snapshot){
-                    if(snapshot.hasData){
-                      bloc.errorStream.listen((_) => _showBottomSheet(
+                    bloc.errorStream.listen((error) async {
+                      _showBottomSheet(
                         context, 
                         Container(
                           height: 40,
@@ -118,11 +123,11 @@ class _GasometriaState extends State<Gasometria> {
                                 topRight: const Radius.circular(10.0)),
                           ),
                           child: Center(
-                            child: Text(snapshot.data, style: TextStyle(color: Colors.white),)
+                            child: Text(error, style: TextStyle(color: Colors.white),)
                           )
                         )
-                      ));
-                    }
+                      );
+                    });
                     return Container();
                   }
                 ),
