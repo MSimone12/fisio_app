@@ -6,13 +6,11 @@ import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:fisio_app/commom/buttons/primary_button.dart';
 
 class Gasometria extends StatefulWidget {
-
   @override
   _GasometriaState createState() => _GasometriaState();
 }
 
 class _GasometriaState extends State<Gasometria> {
-
   final bloc = GasometriaBloc();
 
   Future _showBottomSheet(BuildContext context, Widget child) async {
@@ -34,29 +32,30 @@ class _GasometriaState extends State<Gasometria> {
           width: mediaQuery.padding.right,
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
-            child: Column(  
+            child: Column(
               children: <Widget>[
                 Container(
                   child: AppBar(
-                    elevation: 0,
-                    primary: false,
-                    backgroundColor: Colors.white,
-                    title: Text(
-                      'Gasometria',
-                      style: Theme.of(context).textTheme.headline,
-                    ),
-                    leading: IconButton(
-                      icon: Icon(Icons.close),
-                      color: Colors.black87,
-                      onPressed: () => Navigator.pop(context),
-                    splashColor: Colors.grey,
-                    )
-                  ),
+                      elevation: 0,
+                      primary: false,
+                      backgroundColor: Colors.white,
+                      title: Text(
+                        'Gasometria',
+                        style: Theme.of(context).textTheme.headline,
+                      ),
+                      leading: IconButton(
+                        icon: Icon(Icons.close),
+                        color: Colors.black87,
+                        onPressed: () => Navigator.pop(context),
+                        splashColor: Colors.grey,
+                      )),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Container(
-                    child: Text('Por favor, informe os dados de entrada para calcular a gasometria arterial:')),
+                      child: Text(
+                          'Por favor, informe os dados de entrada para calcular a gasometria arterial:')),
                 ),
                 Column(
                   mainAxisSize: MainAxisSize.max,
@@ -95,7 +94,8 @@ class _GasometriaState extends State<Gasometria> {
                       value: bloc.beOut,
                       stateStream: bloc.beState,
                       errorStream: bloc.beErrorOut,
-                      keyboardType: TextInputType.numberWithOptions(decimal: true, signed: true),
+                      keyboardType: TextInputType.numberWithOptions(
+                          decimal: true, signed: true),
                       controller: MaskedTextController(mask: '*0.00'),
                       label: 'BE',
                       onChange: bloc.beIn.add,
@@ -109,62 +109,63 @@ class _GasometriaState extends State<Gasometria> {
                   ],
                 ),
                 StreamBuilder(
+                    stream: null,
+                    builder: (context, snapshot) {
+                      bloc.errorStream.listen((error) {
+                        _showBottomSheet(
+                            context,
+                            Container(
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: const Radius.circular(10.0),
+                                      topRight: const Radius.circular(10.0)),
+                                ),
+                                child: Center(
+                                    child: Text(
+                                  error,
+                                  style: TextStyle(color: Colors.white),
+                                ))));
+                      });
+                      return Container();
+                    }),
+                StreamBuilder(
                   stream: null,
-                  builder: (context, snapshot){
-                    bloc.errorStream.listen((error) async {
-                      _showBottomSheet(
-                        context, 
+                  builder: (context, snapshot) {
+                    bloc.responseStream.listen((res) => _showBottomSheet(
+                        context,
                         Container(
-                          height: 40,
+                          height: 300,
                           decoration: BoxDecoration(
-                            color: Colors.red,
+                            color: Colors.white,
                             borderRadius: BorderRadius.only(
                                 topLeft: const Radius.circular(10.0),
                                 topRight: const Radius.circular(10.0)),
                           ),
-                          child: Center(
-                            child: Text(error, style: TextStyle(color: Colors.white),)
-                          )
-                        )
-                      );
-                    });
-                    return Container();
-                  }
-                ),
-                StreamBuilder(
-                  stream: bloc.responseStream,
-                  builder: (context, snapshot){
-
-                    bloc.responseStream.listen((_) => _showBottomSheet(
-                      context, 
-                      Container(
-                        height: 300,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                              topLeft: const Radius.circular(10.0),
-                              topRight: const Radius.circular(10.0)),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Text(snapshot.data['disorder'],
-                              style: Theme.of(context).textTheme.headline,
-                            ),
-                            Text(snapshot.data['isAcute'] ? 'Aguda' : 'Crônica',
-                              style: Theme.of(context).textTheme.subhead,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(32),
-                              child: Text(snapshot.data['description'],
-                                style: Theme.of(context).textTheme.body1,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                res['disorder'],
+                                style: Theme.of(context).textTheme.headline,
                               ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ));
+                              Text(
+                                res['isAcute'] ? 'Aguda' : 'Crônica',
+                                style: Theme.of(context).textTheme.subhead,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 64, vertical: 32),
+                                child: Text(
+                                  res['description'],
+                                  style: Theme.of(context).textTheme.body1,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )));
                     return Container();
                   },
                 )
@@ -177,7 +178,7 @@ class _GasometriaState extends State<Gasometria> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
     GasometriaBloc().dispose();
   }
